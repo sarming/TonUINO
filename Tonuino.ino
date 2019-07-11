@@ -18,7 +18,7 @@
 */
 
 // uncomment the below line to enable five button support
-//#define FIVEBUTTONS
+#define FIVEBUTTONS
 
 static const uint32_t cardCookie = 322417479;
 
@@ -685,7 +685,7 @@ void checkStandbyAtMillis() {
   if (sleepAtMillis != 0 && millis() > sleepAtMillis) {
     Serial.println(F("=== power off!"));
     // enter sleep state
-    digitalWrite(shutdownPin, HIGH);
+    digitalWrite(shutdownPin, LOW);
     delay(500);
 
     // http://discourse.voss.earth/t/intenso-s10000-powerbank-automatische-abschaltung-software-only/805
@@ -774,7 +774,7 @@ void setup() {
   pinMode(buttonFivePin, INPUT_PULLUP);
 #endif
   pinMode(shutdownPin, OUTPUT);
-  digitalWrite(shutdownPin, LOW);
+  digitalWrite(shutdownPin, HIGH);
 
 
   // RESET --- ALLE DREI KNÖPFE BEIM STARTEN GEDRÜCKT HALTEN -> alle EINSTELLUNGEN werden gelöscht
@@ -965,6 +965,19 @@ void loop() {
       } while (pauseButton.isPressed() || upButton.isPressed() || downButton.isPressed());
       readButtons();
       adminMenu();
+      break;
+    }
+
+    if (( buttonFour.pressedFor(LONG_PRESS) || buttonFive.pressedFor(LONG_PRESS)) && buttonFour.isPressed() && buttonFive.isPressed()) {
+      mp3.pause();
+      do {
+        readButtons();
+      } while (buttonFour.isPressed() || buttonFive.isPressed());
+      readButtons();
+      Serial.println(F("=== power off!!"));
+      // enter sleep state
+      digitalWrite(shutdownPin, LOW);
+      delay(500);
       break;
     }
 
