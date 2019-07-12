@@ -642,6 +642,9 @@ MFRC522::StatusCode status;
 #define busyPin 4
 #define shutdownPin 7
 #define openAnalogPin A7
+#define muteSpeakerPin 6
+#define headphonePin 5
+
 
 #ifdef FIVEBUTTONS
 #define buttonFourPin A3
@@ -775,6 +778,13 @@ void setup() {
 #endif
   pinMode(shutdownPin, OUTPUT);
   digitalWrite(shutdownPin, HIGH);
+
+  
+  pinMode(headphonePin, INPUT_PULLUP);
+  pinMode(muteSpeakerPin, OUTPUT);
+  digitalWrite(muteSpeakerPin, HIGH);
+
+
 
 
   // RESET --- ALLE DREI KNÖPFE BEIM STARTEN GEDRÜCKT HALTEN -> alle EINSTELLUNGEN werden gelöscht
@@ -945,6 +955,7 @@ void playShortCut(uint8_t shortCut) {
 
 void loop() {
   do {
+    digitalWrite(muteSpeakerPin, !digitalRead(headphonePin));
     checkStandbyAtMillis();
     mp3.loop();
 
