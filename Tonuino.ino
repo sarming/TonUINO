@@ -644,6 +644,7 @@ MFRC522::StatusCode status;
 #define openAnalogPin A7
 #define muteSpeakerPin 6
 #define headphonePin 5
+#define ledPin 8
 
 
 #ifdef FIVEBUTTONS
@@ -721,6 +722,11 @@ void waitForTrackToFinish() {
 
 void setup() {
 
+  pinMode(shutdownPin, OUTPUT);
+  digitalWrite(shutdownPin, HIGH);
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, HIGH);
+
   Serial.begin(115200); // Es gibt ein paar Debug Ausgaben über die serielle Schnittstelle
    
   // Wert für randomSeed() erzeugen durch das mehrfache Sammeln von rauschenden LSBs eines offenen Analogeingangs
@@ -776,8 +782,6 @@ void setup() {
   pinMode(buttonFourPin, INPUT_PULLUP);
   pinMode(buttonFivePin, INPUT_PULLUP);
 #endif
-  pinMode(shutdownPin, OUTPUT);
-  digitalWrite(shutdownPin, HIGH);
 
   
   pinMode(headphonePin, INPUT_PULLUP);
